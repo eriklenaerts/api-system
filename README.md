@@ -14,6 +14,5 @@ Door API's consistent te maken volgens bepaalde afspraken, maken we het veel een
 - tools
 - etc
 
-Ga naar het <a href="https://eriklenaerts.github.io/api-system/#/" target="_blank">Digipolis API system</a>
-
+Ga naar het [Digipolis API system](https://eriklenaerts.github.io/api-system/#/)
 

@@ -1,9 +1,6 @@
-# Digipolis API Requirements
+# Digipolis API System documentatie
 
-(deze file is de readme op github)
+Deze documentatie is gemaakt op basis van https://docsify.js.org/#/
 
 
-## Documentatie site
-
-The documentatie (add link here) wordt gegenereerd met [docsify](https://docsify.js.org/). 
 
