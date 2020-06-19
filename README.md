@@ -4,5 +4,16 @@ Het Digipolis API System is een verzameling van richtlijnen, best praktices en h
 
 Door API's consistent te maken volgens bepaalde afspraken, maken we het veel eenvoudiger voor afnemers om hiermee om te gaan. Zo zal een toepassing die bijvoorbeeld 3 API's afneemt, telkens op dezelfde wijze met [paging](#) kunnen omgaan voor deze API's.
 
-Bekijk hier de documentatie van het [Digipolis API system](https://eriklenaerts.github.io/api-system/#/)
+## Wat vind je in dit API System?
+
+- richtlijnen en regels
+- tips en tricks
+- voorbeeld code
+- referentie code 
+- ontwerp suggesties
+- tools
+- etc
+
+Ga naar het <a href="https://eriklenaerts.github.io/api-system/#/" target="_blank">Digipolis API system</a>
+
 
