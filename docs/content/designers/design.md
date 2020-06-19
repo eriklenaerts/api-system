@@ -1,300 +1,6 @@
-# API Design practices
+## API ontwerp
 
-## Index
-<!-- TOC -->
-
-- [API Design practices](#api-design-practices)
-    - [Index](#index)
-    - [1. Introductie](#1-introductie)
-        - [Enkele definities](#enkele-definities)
-        - [Requirements vs Design](#requirements-vs-design)
-        - [Opbouw van dit document](#opbouw-van-dit-document)
-    - [2. Enkele basis begrippen](#2-enkele-basis-begrippen)
-        - [Request en Response](#request-en-response)
-        - [Think Resources](#think-resources)
-        - [Stateless](#stateless)
-        - [Request Body, Path en methods](#request-body-path-en-methods)
-        - [Andere basics](#andere-basics)
-    - [3. Analyse voorbereiding](#3-analyse-voorbereiding)
-        - [Zoek de entiteiten](#zoek-de-entiteiten)
-        - [Relaties tussen entiteiten](#relaties-tussen-entiteiten)
-        - [Aggregatie en compositie](#aggregatie-en-compositie)
-        - [Zoek de eigenschappen van een entiteit](#zoek-de-eigenschappen-van-een-entiteit)
-    - [4. Ontwerpen met YAML en OAS](#4-ontwerpen-met-yaml-en-oas)
-        - [Tools voor de analist](#tools-voor-de-analist)
-            - [OAS documenten maken](#oas-documenten-maken)
-            - [OAS documenten valideren](#oas-documenten-valideren)
-            - [OAS documenten testen](#oas-documenten-testen)
-        - [Structuur van een OAS 3 document](#structuur-van-een-oas-3-document)
-        - [YAML 101](#yaml-101)
-    - [5. API ontwerp](#5-api-ontwerp)
-        - [Algemene API informatie](#algemene-api-informatie)
-        - [Data modellen](#data-modellen)
-        - [Invoice resources opvragen](#invoice-resources-opvragen)
-            - [Haal één invoice resource op](#haal-één-invoice-resource-op)
-            - [Haal meerdere invoice resources op](#haal-meerdere-invoice-resources-op)
-            - [Sub resources ophalen](#sub-resources-ophalen)
-        - [Invoice resources aanmaken](#invoice-resources-aanmaken)
-        - [Invoice resources aanpassen](#invoice-resources-aanpassen)
-        - [Invoice resource verwijderen](#invoice-resource-verwijderen)
-        - [Eindresultaat](#eindresultaat)
-    - [6. API ontwerp principes](#6-api-ontwerp-principes)
-
-<!-- /TOC -->
-
-## 3. Analyse voorbereiding
-
-Hoe begin je nu aan een API? Wel, eerst en vooral moet je het functioneel domein omzetten in een ontwerp.
-
-> ### >> Fast Forward
-> Ben je al gewoon om functionele analyses te maken, sla dan dit hoofdstuk over en ga meteen aan de slag met het [ontwerpen van API's](#5-api-ontwerp) of lees eerst een intro in het werken met [YAML en OAS](#4-ontwerpen-met-yaml-en-oas).
-
-De analyse gaan we doen aan de hand van een voorbeeld. We maken hierbij gebruik van [UML Class diagrams](https://en.wikipedia.org/wiki/Class_diagram) als notatievorm. In se maakt het niet uit wat je hier voor gebruikt, al waren het bierkaartjes ;).
-
-### Zoek de entiteiten
-
-In veel analyse technieken zoals [Database Normalization](https://en.wikipedia.org/wiki/Database_normalization) of [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) begin je met het zoeken van `entiteiten` vanuit een functioneel domein.
-
-Stel, je krijgt van een klant volgende vraag:
-
-> #### Situatie schets
-> *Ik wil een systeem om `verkoopfacturen` mee te kunnen maken. Een factuur bevat een logo, een uniek nummer, is steeds voor één specifieke `klant` op een gegeven factuurdatum en bevat één of meerdere `factuurlijnen`. Als ik 2 verschillende `producten` verkoop aan de klant, staan deze elk apart vermeld in 2 verschillende factuurlijnen. Elke factuurlijn toont de product code, een omschrijving, het aantal stuks dat er van verkocht is, de eenheidsprijs van het product en de totaalprijs (aantal x productprijs). Op het einde van de factuur staat het bedrag exclusief BTW, de BTW toelage en de totaalprijs inclusief BTW.*
-
-In bovenstaande tekst vinden we volgende entiteiten terug:
-
-<a class="anchor" id="figuur-2"></a>
-<p align="center">
-  <img src="entiteiten.png">
-  <div align="center"><i>figuur 2 - entiteiten</i></div>
-</p>
-
-### Relaties tussen entiteiten
-
-Neem de zin *"Een factuur bevat een logo, een uniek nummer, is steeds voor één specifieke `klant` op een gegeven factuurdatum en bevat één of meerdere `factuurlijnen`. Als ik 2 verschillende producten verkoop aan de klant, staan deze elk apart vermeld in 2 verschillende factuurlijnen."*.
-
-Hieruit lezen we dat een factuur een klant, en factuurlijnen heeft. Er is dus een relatie tussen beiden. Daarnaast zien we ook dat er een relatie is tussen een factuurlijn en een product.
-
-<a class="anchor" id="figuur-3"></a>
-<p align="center">
-  <img src="relaties.png">
-  <div align="center"><i>figuur 3 - relaties</i></div>
-</p>
-
-Bovenstaand schema lezen we als volgt:
-
-- Een factuur is voor één klant, en die klant kan nul of meerdere facturen hebben
-- Een factuur heeft minstens één of meerdere factuurlijnen, en een factuurlijn behoort steeds tot één factuur
-- Een factuurlijn is voor één product, en een product kan voorkomen op geen of meerdere factuurlijnen.
-
-Wanneer we hierboven spreken over "nul", "één" of "meerdere" noemen we dat ook wel eens [cardinaliteit](https://en.wikipedia.org/wiki/Cardinality_(data_modeling))
-
-### Aggregatie en compositie
-
-> ***Disclaimer:** We maken hier natuurlijk een aantal assumpties. In de praktijk zal je die uiteraard afstemmen met de personen voor wie je de toepassing creëert.*
-
-
-Als we het voorgaande nog verder modelleren, kunnen we volgende stellen:
-
-- Een klant kan bestaan zonder dat deze ooit een factuur heeft
-- Een product kan bestaan in het systeem zonder dat het ooit op een factuur is voorgekomen
-- Sterker nog, het heeft zelfs geen enkel bestaansrecht op zichzelf.
-
-Deze zaken drukken we uit via aggregatie en compositie. Maw,
-
-- **aggregatie:** de entiteit in een relatie heeft een bestaansrecht ook buiten haar relatie
-- **compositie:** de entiteit in een relatie heeft geen bestaansrecht buiten haar relatie
-
-Dit wordt weergegeven door open of gesloten ruiten in het diagram
-<a class="anchor" id="figuur-4"></a>
-<p align="center">
-  <img src="relaties2.png">
-  <div align="center"><i>figuur 4 - Aggregatie en Compositie</i></div>
-</p>
-
-Later in het ontwerp van de API gaan we zien waarom dit verschil nu net belangrijk is.
-
-### Zoek de eigenschappen van een entiteit
-
-De zin *"Een factuur bevat een `logo`, een `uniek nummer`, is steeds voor één specifieke `klant` op een gegeven `factuurdatum` en bevat één of meerdere factuurlijnen"* beschrijft ook de eigenschappen van een **factuur**.
-
-- een logo
-- (uniek) factuurnummer
-- een factuurdatum
-
-Vanuit de oorspronkelijke vraag komen we dan bij het volgende diagram uit:
-
-<a class="anchor" id="figuur-5"></a>
-<p align="center">
-  <img src="eigenschappen.png">
-  <div align="center"><i>figuur 5 - eigenschappen</i></div>
-</p>
-
-In essentie is dit het soort werk dat we als analist doen. In volgende hoofdstukken gaan we dit analyse ontwerp in detail omzetten in een elegante API. Maar daarvoor moeten we ons eerst in de juiste mindset krijgen, vandaar de Design Principes.
-
-## 4. Ontwerpen met YAML en OAS
-
-Onze analyse taal is OAS ofwel Open API Specification, ook wel swagger genoemd. Met deze taal beschrijven we onze REST API in een document. De schrijfwijze die we hanteren voor dit document is YAML, hier komen we zo dadelijk op terug.
-
-Als analist van een API is dit het belangrijkste document dat je maakt. Het kan dienen als basis voor ontwikkelaars zodat zij weten wat ze moeten maken en tegelijkertijd is het een basis voor andere stakeholders omdat je al meteen visueel kan aantonen wat er gemaakt gaat worden.
-
-> ### >> Fast Forward
-> Heb je de basis van OAS en YAML al achter de kiezen, ga dan meteen aan de slag met het hoofdstuk [ontwerpen van API's](#5-api-ontwerp).
-
-### Tools voor de analist
-
-Er zijn verschillende hulpmiddelen om een OAS document te maken, te valideren en je resultaten ervan te testen.
-
-#### OAS documenten maken
-
-- [https://editor.swagger.io](https://editor.swagger.io): een eenvoudige online editor om OAS documenten mee te maken. Links zie je jouw syntax, rechts een visuele weergave van je API ontwerp.
-- [https://swagger.io/tools/swaggerhub](https://swagger.io/tools/swaggerhub): gaat verder dan de basis editor en laat toe om je werk eveneens te bewaren in de cloud.
-
-#### OAS documenten valideren
-
-- [https://openapi-validator.antwerpen.be](https://openapi-validator.antwerpen.be): controleert de kwaliteit van je API ontwerp, volgens de Digipolis API regels.
-
-#### OAS documenten testen
-
-- [https://www.getpostman.com](https://www.getpostman.com): vooral om bestaande API's te testen. Door middel van API Mocking, kan je ook je eigen ontwerp effectief testen.
-
-> ### Tip
-> We duiken hieronder in de syntax van OAS. Wil je dit meteen uitproberen, open in een browser de online editor https://editor.swagger.io.
-
-### Structuur van een OAS 3 document
-
-Zoals eerder vermeld, wordden API's uitgeschreven volgens de [Open API Specification v3.0.2](https://swagger.io/specification). Laat ons kort inzoomen op de onderdelen van z'n file:
-
-<a class="anchor" id="figuur-6"></a>
-<p align="center">
-  <img src="openapi3structure.png">
-  <div align="center"><i>figuur 6 - OAS 3 Onderdelen</i></div>
-</p>
-
-- [info](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#infoObject): Bevat de basis info over de API, waaronder de naam, omschrijving en contact informatie.
-- [servers](https://swagger.io/docs/specification/api-host-and-base-path/): Definities van de plaatsen waar je API staat (dev, acc, prod, etc).
-- [security](https://swagger.io/docs/specification/authentication/): Beschrijft hoe je je moet authenticeren om de API te kunnen gebruiken.
-- [paths](https://swagger.io/docs/specification/paths-and-operations/): Dit is het hart, hier beschrijf je aan de hand van paths (aka Routes) wat je precies met je API kan doen.
-- [tags](https://swagger.io/specification/#tagObject): Je kan paths of routes klasseren volgens tags om het overzichtelijk te houden ingeval je veel routes hebt.
-- [externalDocs](https://swagger.io/specification/#externalDocumentationObject): Laat toe om een extra website aan te geven waar externe documentatie staat over je API.
-- [components](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#components-object): Hierin staan de herbruikbare, generieke delen van je API ontwerp zoals schema's, headers, responses, etc.
-
-Een voorbeeld - uit de [analyse](#3-analyse-voorbereiding) hierboven - van z'n OAS document ziet er  als volgt uit:
-
-```yaml
-openapi: 3.0.0
-info:
-  version: '1.0.1'
-  title: 'Sales Invoice'
-  description: 'Create and manage Sales Invoices..'
-servers:
-  - url: 'https://api-gateway/digipolis/sales-invoice/v1/...'
-    description: development
-paths:
-  '/invoices/{number}':
-    get:
-      summary: Retrieve a Sales Invoice
-      description: Retrieve exactly one `Sales Invoice`...
-      parameters:
-        - in: path
-          name: number
-          required: true
-          schema:
-            type: string
-            example: 20037
-      responses:
-        '200':
-          description: OK
-      tags:
-        - Invoicing
-        - System
-```
-
-Je ziet een `info` luik alsook een `servers` en `paths` onderdeel in het voorbeeld hierboven, net zoals de de basis blokken van de OAS structuur. Je kan dit document op 2 manieren schrijven, ofwel in YAML ofwel in JSON. Beide kunnen, het voorbeeld van hierboven is in YAML, hetzelfde voorbeeld in JSON is hieronder.
-
-```JSON
-{
-  "openapi": "3.0.0",
-  "info": {
-    "version": "1.0.1",
-    "title": "Sales Invoice",
-    "description": "Create and manage Sales Invoices.."
-  },
-  "servers": [
-    {
-      "url": "https://api-gateway/digipolis/sales-invoice/v1/...",
-      "description": "development"
-    }
-  ],
-  "paths": {
-    "/invoices/{number}": {
-      "get": {
-        "summary": "Retrieve a Sales Invoice",
-        "description": "Retrieve exactly one `Sales Invoice`...",
-        "parameters": [
-          {
-            "name": "number",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": 20037
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "Invoicing",
-          "System"
-        ]
-      }
-    }
-  }
-}
-```
-
-Beide schrijfwijzen kunnen verwerkt worden door computers, het YAML formaat heeft als voordeel dat er minder tekens worden gebruikt zoals quotes, vierkante haken en accolades. Hierdoor is het compacter en duidelijker leesbaar voor mensen. Onze voorkeur gaat dan ook uit naar het YAML formaat.
-
-> ### Opmerking
-> Je zal gemerkt hebben we in de API in het engels werken in tegenstelling tot onze analyse voorbereiding. Dit is een afspraak dat we hebben vastgelegd bij Digipolis.
-
-### YAML 101
-
-[YAML formaat](https://en.wikipedia.org/wiki/YAML) werkt met `key-value pairs`. Je geeft de naam van een key en vervolgens de waarde erachter.
-
-```yaml
-  ...
-  title: 'Sales Invoice'
-  ...
-```
-
-Key-value pairs die behoren tot een collectie worden samen gevormd door opeenvolgende regels met dezelfde insprong  (lees: door 2 of meerdere spaties vooraan de regel toe te voegen). Zo zie je dat version, title en description behoren tot de info collection.
-
-```yaml
-...
-info:
-  version: '1.0.1'
-  title: 'Sales Invoice'
-  description: 'Create and manage Sales Invoices..'
-...
-```
-
-Tot slot zijn er lijsten, deze kan je herkennen door het `-` teken vooraan elke lijn.
-
-```yaml
-      ...
-      tags:
-        - Invoicing
-        - System
-      ...
-```
-
-## 5. API ontwerp
-
-In dit hoofdstuk gaan we het voorbeeld uit de [Analyse voorbereiding](#3-analyse-voorbereiding) stuk voor stuk omzetten in een API. We maken stapsgewijs het OAS document op in het YAML formaat.
+In dit hoofdstuk gaan we het voorbeeld uit de [Analyse voorbereiding](/content/designers/analysis) stuk voor stuk omzetten in een API. We maken stapsgewijs het OAS document op in het [YAML formaat](/content/designers/oas-yaml).
 
 ### Algemene API informatie
 
@@ -325,11 +31,15 @@ Als we data willen opvragen van een REST API, dan krijgen we meestal data in de 
 
 Neem even het voorbeeld van een `Product` uit het analyse voorbeeld.
 
-<a class="anchor" id="figuur-7"></a>
-<p align="center">
-  <img src="uml-cd-product.png">
-  <div align="center"><i>figuur 7 - Product Entiteit</i></div>
-</p>
+>[!NOTE|icon:fas fa-info-circle|label:Product Entiteit]
+>```plantuml
+>@startuml
+>class Product{
+>  omschrijving: string
+>  eenheidsprijs: currency
+>}
+>@enduml
+>```
 
 Stel dat er 3 producten in het systeem zitten:
 
@@ -339,7 +49,7 @@ Stel dat er 3 producten in het systeem zitten:
 
 In JSON zou dit er dan als volgt uit zien:
 
-```JSON
+``` json
 {
   "products": [
     {
@@ -362,7 +72,7 @@ Er zijn 3 setjes van data elks ontsloten door accolades wat aangeeft dat omschri
 
 Een OAS document beschrijft de API, het is niet de API zelf. Dus in het OAS document gaan we de vorm van de data beschrijven en dus niet de data zelf. De vorm van bovenstaand Product entiteit beschrijven we aan de hand van een schema als volgt:
 
-```YAML
+```yaml
 components:
   schemas:
     Product:
@@ -380,7 +90,7 @@ components:
 
 Zoals je kan zien worden de schema’s van de data modellen genoteerd in het `components` gedeelte. Dit hoeft niet maar is wel aangewezen, zo kan je eenvoudiger het data model hergebruiken in verschillende scenario's. In het volgende voorbeeld maken we de `InvoiceLine` entiteit die een verwijzing heeft naar de `Product` entiteit.
 
-```YAML
+```yaml
 components:
   schemas:
     InvoiceLine:
@@ -407,17 +117,27 @@ components:
 
 Zie je dat de InvoiceLine nu 2 properties heeft, één voor het aantal, en één voor het Product. Net zoals in het voorbeeld van onze analyse.
 
-<a class="anchor" id="figuur-8"></a>
-<p align="center">
-  <img src="uml-cd-factuurlijn.png">
-  <div align="center"><i>figuur 8 - InvoiceLine Entiteit</i></div>
-</p>
+
+>[!NOTE|icon:fas fa-info-circle|label:Product Entiteit]
+>```plantuml
+>@startuml
+>class Factuurlijn{
+>  aantal: integer
+>  product: Product
+>}
+>class Product{
+>  omschrijving: string
+>  eenheidsprijs: currency
+>}
+>Factuurlijn "0..*" o-down- "1" Product
+>@enduml
+>```
 
 De `product` property van de `InvoiceLine` schema verwijst naar het eerder gedefinieerd product in plaats van dat hier nog eens te herhalen door middel van de $ref notatie.
 
 Als laatste gaan we nog de Invoice entiteit zelf toevoegen aan de schema’s. Een factuur heeft één of meerdere factuurlijnen, deze verzameling wordt via een array opgezet in het OAS document:
 
-```YAML
+``` yaml
 components:
   schemas:
     Invoice:
@@ -468,33 +188,29 @@ components:
 
 Merk op dat in het bovenstaande voorbeeld we ook een `klant` hebben toegevoegd aan de Invoice entiteit. Deze keer hebben we niet met een verwijzing gewerkt ($ref) maar met een klant object als onderdeel van het Invoice object. Dit is kan perfect, enigste probleem is dat we nu het schema van de klant niet kunnen hergebruiken.
 
-> ### Onthoud
+>[!TIP|label:Onthoud]
 > JSON is voor de data, YAML is voor het schema van deze data in het OAS document.
 
 ### Invoice resources opvragen
 
 Nu we onze data gedefinieerd hebben, komt de volgende vraag, hoe haal ik deze uit de API uit?
 
-Check even terug de [basics van dit document](#2-enkele-basis-begrippen) om de basis terug op te frissen.
+Check even terug de [basics van dit document](/content/designers/basic-concepts) om de basis terug op te frissen.
 
 Via de volgende operatie kan een afnemer een factuur opvragen uit onze API met nummer “INV10034”
 
-```HTTP
+``` http
 GET /invoices/INV10034 HTTP/1.1
 Content-Type: application/json
 ```
 
 Nu deze instructies zijn redelijk technisch om steeds opnieuw in te voeren, vandaar dat het handig is om te werken met Postman. Via deze tool kan je op een visuele manier je vraag aan de API opstellen, deze vraag bewaren, etc.
 
-<a class="anchor" id="figuur-9"></a>
-<p align="center">
-  <img src="postman.png">
-  <div align="center"><i>figuur 9 - Postman</i></div>
-</p>
+![Postman](../images/postman.png)
 
 Laten we deze operatie eens uitwerken in het `paths` blok van het OAS document door middel van een `GET method`.
 
-```YAML
+``` yaml
 ...
 paths:
   '/invoices/{id}':
@@ -526,7 +242,7 @@ Hier zijn enkele spelregels om je resources in je path op te bouwen:
 
 Terug naar ons voorbeeld waar we een factuur resource willen ophalen. De volgende stap is het noteren van de HTTP method, in ons geval willen we data opvragen, dus dat wordt een GET method. Zoals je hieronder ziet, komt de GET onder het path terecht.
 
-```YAML
+``` yaml
 ...
 paths:
   '/invoices/{id}':
@@ -538,7 +254,7 @@ paths:
 
 Je kan onder ditzelfde path eveneens een andere operatie plaatsen, zoals de `HEAD` hieronder.
 
-```YAML
+``` yaml
 ...
 paths:
   '/invoices/{id}':
@@ -553,7 +269,7 @@ De HEAD wordt in de API wereld gebruikt om eenvoudigweg aan de API te vragen of 
 
 In het `/invoices/{id}` path, zie je dat er gebruik wordt gemaakt van een parameter `{id}`. We moeten nog wel verder beschrijven wat we net verwachten van de afnemers als ze dit meegeven in een request. Dit beschrijven we in het parameters gedeelte:
 
-```YAML
+``` yaml
 ...
 paths:
   '/invoices/{id}':
@@ -573,7 +289,7 @@ paths:
 
 De vraagstelling is nu beschreven, nu rest er enkel nog het beschrijven van het antwoord van onze API. Dit komt in een luik `responses`:
 
-```YAML
+``` yaml
 paths:
   '/invoices/{id}':
     get:
@@ -594,13 +310,13 @@ paths:
           description: Not Found
 ```
 
-Ofwel komt er een code 200 uit, ofwel een 404. Dit zijn HTTP codes, er is [een hele lijst van](https://httpstatuses.com/).
+Ofwel komt er een code 200 uit, ofwel een 404. Dit zijn HTTP codes, er is [een hele lijst van](/content/developers/statuscodes-response) of [httpstatuses.com](https://httpstatuses.com/).
 
 200 wil zeggen dat alles goed is gegaan en dat factuur resource gevonden is. 404 wil zeggen dat het factuur met de nummer die je opgaf niet bestaat.
 
 Ingeval er een 200 code uitkomt, dan is het de bedoeling dat je effectief iets terugstuurt van data. Nu kan je in de API beschrijving noteren wat er terugkomt als antwoord. Hiervoor ga je de 200 response nog verder uitdiepen met:
 
-```YAML
+``` yaml
 paths:
   '/invoices/{id}':
     get:
@@ -631,12 +347,6 @@ Valt er iets op? Inderdaad, we verwijzen hier naar het data model ‘Factuur’ 
 
 Als je gevolgd hebt in de editor van swagger krijg je visueel het volgende resultaat:
 
-<a class="anchor" id="figuur-10"></a>
-<p align="center">
-  <img src="swagger-ui.png">
-  <div align="center"><i>figuur 10 - Swagger UI voorbeeld</i></div>
-</p>
-
 #### Haal meerdere invoice resources op
 
 Stel dat we een lijst willen ophalen van factuur resources, dan komen er nog enkele concepten bij, waaronder:
@@ -650,7 +360,7 @@ Het eerste punt wordt gerealiseerd door een Paging concept. Hiermee halen we fac
 
 In het vorige voorbeeld, waar we één factuur gingen ophalen, was er een `{id}` parameter dat onderdeel is van het path. Nu zien we een `page` en `pagesize` parameter die onderdeel zijn van de querystring, ofwel het deel van de url na het ?. Dit zijn de 2 mechanismen om parameters mee te geven. Binnen de API wereld is het een zekere afspraak dat de {id} in het path staat en de andere parameters in de querystring.
 
-Merk op dat deze parameter namen (page, pagesize) vast liggen, zo, kan iedere afnemer hier consistent mee werken over al onze API’s heen. Lees meer hierover in onze [API Requirements](https://github.com/digipolisantwerpdocumentation/api-requirements#paginatie-1).
+Merk op dat deze parameter namen (page, pagesize) vast liggen, zo, kan iedere afnemer hier consistent mee werken over al onze API’s heen. Lees meer hierover in onze [API Requirements](/content/developers/paging).
 
 Bijkomend willen we factuur resources ophalen die aan een bepaald criteria voldoen, zoals alle facturen van klant met nummer 123.
 
@@ -662,7 +372,7 @@ In tegenstelling tot page en pagesize is deze customer-id parameter wel specifie
 
 Dit allemaal samen schrijven we in ons OAS document dan als volgt:
 
-```YAML
+``` yaml
 paths:
   '/invoices/{id}':
     get:
@@ -699,7 +409,7 @@ Even terug naar de request van de afnemer:
 
 Het antwoord op deze request is een lijst van Invoices. We passen onze GET operatie voor het ‘invoices’ path aan als volgt:
 
-```YAML
+``` yaml
  '/invoices':
     get:
       summary: Retrieve a list of invoices
@@ -721,7 +431,7 @@ Het antwoord op deze request is een lijst van Invoices. We passen onze GET opera
 
 Nu hebben we Invoices nog wel niet gedefinieerd, daar komen we zo dadelijk op terug, we tonen alvast wat we willen dat er uit deze API call moet komen:
 
-```JSON
+``` json
 {
   "_links": {
     "self": { "href": "/invoices?pagesize=10&page=1" },
@@ -768,7 +478,7 @@ Dit is iets complexer dan het [opvragen van één factuur resource](#haal-één-
 
 Herinner je nog dat je zelf de `page` en `pagesize` parameters niet meer moest definiëren omdat dit al voor jou was gedaan? Wel, hetzelfde geldt nu voor de `_links` en `_page` onderdelen van het response data model. Het schema van bovenstaande data maken we als volgt:
 
-```YAML
+``` yaml
 components:
   schemas:
     Invoices:
@@ -792,7 +502,7 @@ Zoals je kan zien is een Invoices data model gebaseerd op 3 luiken, in het begin
 
 We hebben namelijk het vroegere Invoice data model aangepast naar het volgende:
 
-```YAML
+``` yaml
 components:
   schemas:
     Invoice:
@@ -840,7 +550,7 @@ Als afnemer, maak ik volgende request, wat zoveel wil zeggen als *“haal alle f
 
 Om deze operatie toe te voegen bij de API vullen we het OAS document aan met:
 
-```YAML
+``` yaml
   '/invoices/{id}/invoicelines':
     get:
       summary: Retrieve a all invoice lines for a given Sales Invoice
@@ -868,7 +578,7 @@ Om deze operatie toe te voegen bij de API vullen we het OAS document aan met:
 
 Hiervoor moeten we natuurlijk ook een InvoiceLines data model beschrijven:
 
-```YAML
+``` yaml
     InvoiceLines:
       type: object
       properties:
@@ -892,7 +602,7 @@ De volgende vraag is natuurlijk, hoe ver en diep kan je gaan?  Kan je ook de pro
 
 Of is dit een brug te ver? Een hulpmiddel om deze beslissing te nemen is het verschil tussen een [aggregatie en compositie](#aggregatie-en-compositie). Bij deze laatste, is het een sub resource en daal je dieper in het pad af.
 
-> ### Reminder
+>[!TIP|label:Reminder]
 > Aggregaties zijn entiteiten die kunnen leven op zichzelf, composities zijn er die enkel een bestaansrecht hebben onder een ander.
 
 Indien het een aggregatie is, wat het geval is voor producten, kan je beter opnieuw starten als volgt
@@ -905,7 +615,7 @@ We hebben tot hiertoe voornamelijk met de GET methode gewerkt om dingen op te vr
 
 Deze methode plaats je onder hetzelfde path als voor het ophalen van factuur resources als volgt:
 
-```YAML
+``` yaml
  '/invoices':
     get:
       ...
@@ -935,7 +645,7 @@ Dit is de eerste keer dat we een `requestBody` gebruiken. In essentie komt het e
 
 Wanneer facturen worden aangemaakt is het meestal zo, dat het factuurnummer gegenereerd wordt door het facturatie systeem. Maw, het is niet de bedoeling dat de afnemer van de API dit opgeeft wanneer hij of zij een nieuw factuur wil maken. Hiervoor passen we ons data model aan door het factuurnummer readOnly te maken. Met deze simpele aanpassing kunnen we hetzelfde data model gebruiken bij het ophalen en aanmaken van facturen.
 
-```YAML
+``` yaml
       type: object
       properties:
         number:
@@ -947,7 +657,7 @@ Wanneer facturen worden aangemaakt is het meestal zo, dat het factuurnummer gege
 
 De response van onze POST operatie is een HTTP 201 code. Additioneel komt er eveneens het nieuwe invoice number uit dat gegenereerd is. Bij het aanmaken van een resource sturen we ook nog een HTTP header terug met de locatie van de nieuw aangemaakt Invoice resource. Deze header beschrijven we ook in de definitie van de response:
 
-```YAML
+``` yaml
       responses:
         '201':
           description: Sales Invoice created
@@ -979,7 +689,7 @@ Laten we beginnen met een eenvoudige kleine aanpassing. Hiervoor gebruiken we de
 
 met als body:
 
-```JSON
+``` json
 { 
    "datum": null
    "logo": "s3.amazon.com/bbt2525/logo.xyz.png",
@@ -990,7 +700,7 @@ De bedoeling van deze PATCH is het verwijderen van de factuur datum en het aanpa
 
 De beschrijving van de PATCH operatie is als volgt:
 
-```YAML
+``` yaml
   '/invoices':
     patch:
       summary: Update a Sales Invoice
@@ -1021,7 +731,7 @@ We kunnen ook het volledige factuur aanpassen door gebruik te maken van de PUT m
 
 met als body:
 
-```JSON
+``` json
 {
   "date": "30-04-2020",
   "logo": "s3.amazon.com/klj1002/logo.xyz.png",
@@ -1047,7 +757,7 @@ met als body:
 
 De YAML ziet er als volgt uit:
 
-```YAML
+``` yaml
   '/invoices':
     put:
       summary: Update a Sales Invoice
@@ -1082,7 +792,7 @@ Een factuur verwijderen is misschien wel één van de eenvoudigste om te beschri
 
 Het schema wordt dan:
 
-```YAML
+``` yaml
   '/invoices':
     delete:
       summary: Delete a Sales Invoice
@@ -1112,30 +822,3 @@ In onderstaande figuur tonen we alles bij elkaar. De meeste van de operaties zij
   <div align="center"><i>figuur 12 - Eindresultaat</i></div>
 </p>
 
-## 6. API ontwerp principes
-
-1. Als ontwerper van een API beschouw je deze API als een eindproduct en niet als een technisch tussenstuk. Wees een goed ***Product Owner***, net zoals je dat zou doen bij applicaties voor eindgebruikers.
-
-2. Bij het ontwerp kijk je door de bril van de afnemers, ofwel een ***Outside-In perspective***.
-
-3. Je ***afnemers van de API zijn developers***, leer hen kennen, net als klanten voor applicaties.
-
-4. Maak goed leesbare - niet gegenereerde - ***documentatie*** met voorbeelden, edge cases, mogelijke fouten en oplossingen. *(Hier alvast enkele [tips](https://github.com/digipolisantwerpdocumentation/api-requirements/blob/master/swagger-docs.md))*.
-
-5. Hou het ontwerp ***eenvoudig en intuïtief***, hoe minder externe documentatie er moet gelezen worden hoe beter het ontwerp.
-
-6. Werk in ***iteraties*** en verbeter de consistentie en eenvoud op basis van feedback van de afnemers.
-
-7. ***API Design First:*** Door eerst het ontwerp van de API te maken, voor we beginnen met de implementatie ervan, hebben we enkele voordelen:
-
-    - Je kan vroeg in het proces feedback verzamelen.
-    - Je kan iteratief te werk gaan. Bij elke sprint kan je het API ontwerp verfijnen en overmaken aan de ontwikkelaars.
-    - Ontwikkelaars kunnen aan de hand van het precieze ontwerp meteen zien wat er van hen verwacht wordt.
-    - Swagger files kunnen bezorgd worden aan afnemers, nog voor de API implementatie klaar is. Het werkt zo als een contract tussen beide van wat er gaat komen. M.a.w.: door eerst de API vast te leggen, kan er parallel gewerkt worden aan de ontwikkeling van de producer en de consumer. Je moet niet wachten tot de producer klaar is, om te starten met de ontwikkeling van de consumer.
-    - Tools kunnen je helpen met de kwaliteit van je API ontwerp en zo bijdragen aan een betere analyse in het geheel.
-
-Jeff Bezos van Amazon zei ooit `if you build it, you run it`, dit gaat hier ook op, toch gedeeltelijk. Na de bouw is er een commerciële en operationele bezigheid. Je brengt de API aan de man en je zorgt ervoor dat deze blijft draaien. Dit laatste laten we weliswaar liever over aan de gespecialiseerde mensen.
-
----
-
-1. <a class="anchor" id="footnote-1"></a>We gebruiken de term RESTful API ook al zijn we hier niet 100% compatible met [level 3 van het Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html). Onze API Requirements zorgen wel dat er de HAL standard wordt gevolgd voor het [Paged Responses](https://github.com/digipolisantwerpdocumentation/api-requirements#paginatie-response-bericht)

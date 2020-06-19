@@ -27,7 +27,10 @@
 
     * [Intro](/content/designers/intro.md)
     * [Basis begrippen](/content/designers/basic-concepts.md)
-    * [...](/content/designers/gids.md)
+    * [Analyse voorbereiding](/content/designers/analysis.md)
+    * [OAS en YAML](/content/designers/oas-yaml.md)
+    * [API design](/content/designers/design.md)
+    * [Design principes](/content/designers/principles.md)
     * [Todo](/content/designers/todo.md)
 
 * Tips

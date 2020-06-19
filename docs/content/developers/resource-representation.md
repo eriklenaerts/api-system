@@ -2,7 +2,7 @@
 
 ### Taal
 
-#### API's in het Engels [ R-TL-001 ]
+#### API's in het Engels <span class="rule-ref">R-TL-001</span>
 
 Om onze API's zo breed mogelijk bruikbaar te maken worden ze in het **Engels** gemaakt.
 

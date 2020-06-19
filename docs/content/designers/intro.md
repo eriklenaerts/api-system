@@ -1,4 +1,4 @@
-## 1. Introductie
+## Introductie
 
 In dit document beschrijven we best practices voor het ontwerpen van RESTful API's <sup>[[1]](#footnote-1)</sup> met een JSON payload. Bedoeling is dat iedereen functionele requirements kan omzetten in een RESTful API ontwerp. We noteren dit ontwerp in [Open API Specification v3.0.2](https://swagger.io/specification), zeg maar de opvolger van swagger.
 
@@ -40,3 +40,6 @@ De meeste ontwikkelaars zijn bezig met de interne kant van een API. We zien vaak
 
 5. Als laatste sommen we nog enkele [API ontwerp principes](#6-api-ontwerp-principes) op.
 
+---
+
+1. <a class="anchor" id="footnote-1"></a>We gebruiken de term RESTful API ook al zijn we hier niet 100% compatible met [level 3 van het Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html). Onze API Requirements zorgen wel dat er de HAL standard wordt gevolgd voor het [Paged Responses](https://github.com/digipolisantwerpdocumentation/api-requirements#paginatie-response-bericht)

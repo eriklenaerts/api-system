@@ -1,7 +1,7 @@
-## 2. Enkele basis begrippen
+## Enkele basis begrippen
 
-> ### >> Fast Forward
-> Weet je reeds hoe basis REST API's werken, ga dan ineens verder naar het [API ontwerp](#5-api-ontwerp) of toch nog eerst even nalezen hoe je een voorbereidende [functionele analyse](#3-analyse-voorbereiding) maakt.
+>[!TIP|icon:fas fa-forward|label:Skip dit hoofdstuk]
+> Weet je reeds hoe basis REST API's werken, ga dan ineens verder naar het [API ontwerp](/content/designers/design) of toch nog eerst even nalezen hoe je een voorbereidende [functionele analyse](/content/designers/analysis) maakt.
 
 ### Request en Response
 
@@ -23,7 +23,7 @@ Om dit te verduidelijken beginnen we met een voorbeeld dat niet zal werken.
 
 Stel dat we een factuur creëren door volgende `HTTP POST` Request:
 
-``` HTTP
+``` http
 POST /invoices HTTP/1.1
 Content-Type: application/json
 {
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 Vervolgens voegen we een factuurlijn toe; merk op dat we hier nergens het factuurnummer meegeven dat we terug gekregen hebben van de vorige request.
 
-``` HTTP
+``` http
 POST /invoices/lines HTTP/1.1
 Content-Type: application/json
 {
@@ -49,7 +49,7 @@ Dit gaat dus __*NIET*__ werken.
 
 De API zal niet onthouden welke factuur ik net heb gemaakt. Je moet expliciet alle data meegeven die nodig is om de volledige call af te handelen. In onderstaand voorbeeld geven we het factuurnummer mee in het path `POST /invoices/20037/lines`.
 
-``` HTTP
+``` http
 POST /invoices/20037/lines HTTP/1.1
 Content-Type: application/json
 {
@@ -63,7 +63,7 @@ Content-Type: application/json
 
 Even het voorbeeld herhalen:
 
-``` HTTP
+``` http
 POST /invoices/20037/lines HTTP/1.1
 Content-Type: application/json
 {
@@ -79,7 +79,3 @@ In bovenstaand voorbeeld, staat de data op verschillende plaatsen. De informatie
 - **Resource Method:** `POST` - en daarvoor wil ik een extra lijn toevoegen, de inhoud ervan staat in de body van de request
 - **Body**: `{ "productKey": "1TER", "quantity": 2, "..."}`: met deze data maak ik de nieuwe factuurlijn aan
 - **Format**: `Content-Type: application/json`: en het formaat van de data die ik meegeef is JSON
-
-### Andere basics
-
-In de [Digipolis API requirements](https://github.com/digipolisantwerpdocumentation/api-requirements) beschrijven we uitvoerig de details van de Payload (de body), welke afspraken we maken voor naamgeving, omgang met datum en tijd(zones), structuur van de collections en resources, etc. Zeker de moeite om door te gaan ;).
