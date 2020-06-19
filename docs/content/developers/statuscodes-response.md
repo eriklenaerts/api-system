@@ -1,7 +1,6 @@
 ## Status codes & response
 ### Vastgelegde HTTP Status codes en response informatie
-#### R-SC-001
-##### Gebruik de correcte status code bij elke response en de benodigde reponse informatie
+#### Gebruik de correcte status code bij elke response en de benodigde reponse informatie <span class="rule-ref">R-SC-001</span>
 Elk response bericht dient een correcte HTTP status code terug te geven. Onderstaande tabel toont de mogelijke status codes, hun respectievelijke betekenis en welke HTTP status code ook effectief een response body moet bevatten.
 
 Hoewel deze lijst van HTTP status codes zeker niet volledig is, dekt deze wel de meeste use cases.

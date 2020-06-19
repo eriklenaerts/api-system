@@ -10,52 +10,44 @@ Om onze API's zo breed mogelijk bruikbaar te maken worden ze in het **Engels** g
 
 Hanteer onderstaande conventies voor berichten die JSON als payload formaat hebben.
 
-#### R-JS-001
-##### Gebruik steeds dubbele quotes bij keys
+#### Gebruik steeds dubbele quotes bij keys <span class="rule-ref">R-JS-001</span>
 ```json
 "company" : "Digipolis"
 ```
 
-#### R-JS-002
-##### Gebruik steeds dubbele quotes bij string values
+#### Gebruik steeds dubbele quotes bij string values <span class="rule-ref">R-JS-002</span>
 ```json
 "company" : "Digipolis"
 ```
 
-#### R-JS-003
-##### Gebruik steeds camelCase om keys weer te geven
+#### Gebruik steeds camelCase om keys weer te geven <span class="rule-ref">R-JS-003</span>
 ```json
 "addressLine" : "Generaal Armstrongweg"
 ```
 
-#### R-JS-004
-##### Gebruik geen dots "." in keys
+#### Gebruik geen dots "." in keys <span class="rule-ref">R-JS-004</span>
 ```json
 "address.street" : "Generaal Armstrongweg" wordt NIET toegelaten (gebruik dan hiërarchieën)
 ```
 
-#### R-JS-005
-##### Keys mogen niet starten met cijfers
+#### Keys mogen niet starten met cijfers <span class="rule-ref">R-JS-005</span>
 Dit verlaagt immers de leesbaarheid.
 ```json
 "5street" : "Generaal Armstrongweg" wordt NIET toegelaten
 ```
 
-#### R-JS-006
-##### Verwijder `null` waardes uit de resource representatie indien deze geen betekenis hebben
+#### Verwijder `null` waardes uit de resource representatie indien deze geen betekenis hebben <span class="rule-ref">R-JS-006</span>
 ```json
 "middleName" : null
 ```
 
-#### R-JS-007
-##### Toon lege waardes in de resource representatie
+##### Toon lege waardes in de resource representatie <span class="rule-ref">R-JS-007</span>
 ```json
 "middleName" : "",
 "orders" : []
 ```
 
-#### R-JS-008
-##### Encapsuleer arrays steeds in een object
+#### Encapsuleer arrays steeds in een object <span class="rule-ref">R-JS-008</span>
 Dit omdat bepaalde frameworks niet goed overweg kunnen met native arrays
 ```json
 {
@@ -77,8 +69,7 @@ Dit omdat bepaalde frameworks niet goed overweg kunnen met native arrays
 ```
 
 ### Datums en timestamps
-#### R-DT-001
-##### Formatteer datums en timestamps volgens RFC339
+#### Formatteer datums en timestamps volgens RFC339 <span class="rule-ref">R-DT-001</span>
 Formatteer datums en timestamps steeds volgens [RFC3339](https://www.ietf.org/rfc/rfc3339.txt). JSON definieert immers geen standaard formaat voor datums en timestamps.
 
 > RFC3339 volgt de ISO 8601 standaard maar heeft enkele optimalisaties voor het internet en machine to machine communicatie. Bijgevolg is deze ideaal voor REST API's)
@@ -102,16 +93,14 @@ Hier enkele basis regels voor het gebruik van datum en/of tijd in jouw API:
 
 
 ### Durations
-#### R-DU-001
-##### Formatteer durations volgens ISO8601
+#### Formatteer durations volgens ISO8601 <span class="rule-ref">R-DU-001</span>
 Durations worden geformatteerd volgens [ISO8601](https://en.wikipedia.org/wiki/ISO_8601).
 ``` prettyprint
 "duration" : "P0003-04-06T12:00:00" (3 jaar, 4 maanden, 6 dagen, 12 uur)
 ```
 
 ### Geospatiale data
-#### R-GS-001
-##### Formatteer geospatiale data volgens RFC7946
+#### Formatteer geospatiale data volgens RFC7946 <span class="rule-ref">R-GS-001</span>
 Alle geospatiale data wordt steeds geformatteerd volgens [RFC7946](https://tools.ietf.org/html/rfc7946)
 
 Deze standaard laat toe om van eenvoudige locatie objecten in een longitude, latitude array...
@@ -148,8 +137,7 @@ tot meer complexe geospatiale objecten zoals bijvoorbeeld een polygoon (en nog v
 ```
 
 ### Hiërarchie
-#### R-HA-001
-##### Structureer resource hiërarchisch ipv vlak
+#### Structureer resource hiërarchisch ipv vlak <span class="rule-ref">R-HA-001</span>
 Kies steeds voor een hiërarchisch gestructureerde resource representatie in plaats van een vlakke structuur. Een hiërarchische voorstelling biedt als grote voordeel dat het overzichtelijker en duidelijker is voor resources met een groot aantal velden. Daarnaast biedt het als grote voordeel het hergebruik van entiteiten over APIs heen.
 
 Als algemene richtlijn kan je stellen dat wanneer het aantal velden \> 15 je best naar een hiërarchische structuur kan overgaan indien dit meer duidelijkheid schept.

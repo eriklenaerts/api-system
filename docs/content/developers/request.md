@@ -1,13 +1,12 @@
 ## Request
 
 ### Request body & query parameters
-#### R-RQ-001
-##### Verstuur resource representaties via de request body
+#### Verstuur resource representaties via de request body <span class="rule-ref">R-RQ-001</span>
 Resource representations dienen steeds in de request body te worden doorgestuurd en nooit via query parameters.
 
 Query parameters worden steeds gebruikt om bepaalde functionaliteiten zoals paginatie, filtering, sortering, etc aan te spreken.  
 **Query parameters worden bijgevolg nooit gebruikt om resource representaties weer te geven.**
-``` prettyprint
+``` http
 POST /business-parties?company=Google&website=http://www.google.com/&addressLine1=111 8th Ave&addressLine2=4th Floor&state=NY&city=New York&zip=10011
 gebruik je dus NIET
 ```
@@ -15,8 +14,7 @@ gebruik je dus NIET
 Bovenstaand voorbeeld is niet enkel onleesbaar, het laat ook niet toe om hiërarchieën op een eenvoudige manier op te nemen in de representatie.
 
 ### HTTP verbs
-#### R-HV-001
-##### Gebruik HTTP verbs correct en volgens RFC7231
+#### Gebruik HTTP verbs correct en volgens RFC7231 <span class="rule-ref">R-HV-001</span>
 Gebruik steeds de juiste HTTP verbs voor de bijhorende request zoals weergegeven in onderstaande tabel. HTTP verbs moeten in lijn zijn
 met [RFC7231](https://tools.ietf.org/html/rfc7231).
 
@@ -41,8 +39,7 @@ Veronderstel dat een consumer een update wil doen van een resource door middel v
 **Optionele velden in de resource representatie dienen op hun default waarde ingesteld te worden op de backend indien deze niet worden
 opgegeven in de request.**
 
-#### R-HV-002
-##### Gebruik HTTP verb PATCH volgens RFC7386 of RFC6902
+#### Gebruik HTTP verb PATCH volgens RFC7386 of RFC6902 <span class="rule-ref">R-HV-002</span>
 - eenvoudige wijzigingen : [RFC7386](https://tools.ietf.org/html/rfc7386)
 - complexe wijzigingen : [RFC6902](https://tools.ietf.org/html/rfc6902)
 
@@ -54,17 +51,17 @@ opgegeven in de request.**
 Voor elk van onderstaande voorbeelden is de request body steeds leeg
 
 -   Haalt een lijst op van alle business-parties. Het resultaat is steeds gepagineerd.
-``` prettyprint
+``` http
 GET https://api-gateway/digipolis/business-party/v1/business-parties
 ```
 
 -   Haalt business-party op met id 6532
-``` prettyprint
+``` http
 GET https://api-gateway/digipolis/business-party/v1/business-parties/6532
 ```
 
 -   Haalt alle contracten die behoren bij business-party met id 6532. Door het feit dat contracts een subresource is van business-parties betekent dit dat beiden met elkaar gerelateerd zijn en dat het hier de contracts betreft van een welbepaalde business-party.
-``` prettyprint
+``` http
 GET https://api-gateway/digipolis/business-party/v1/business-parties/6532/contracts
 ```
 
@@ -80,7 +77,7 @@ GET https://api-gateway/digipolis/business-party/v1/business-parties/6532/contra
 Voor elk van onderstaande voorbeelden is de request body steeds leeg
 
 -   Controleert het bestaan van business-party met id 6532 (zonder de volledige resource op te halen)
-``` prettyprint
+``` http
 HEAD https://api-gateway/digipolis/business-party/v1/business-parties/6532
 ```
 
@@ -89,12 +86,12 @@ HEAD https://api-gateway/digipolis/business-party/v1/business-parties/6532
 Voor elk van onderstaande voorbeelden bevat de request body steeds de volledige resource representatie
 
 -   Updaten business-party met id 6532
-``` prettyprint
+``` http
 PUT https://api-gateway/digipolis/business-party/v1/business-parties/6532
 ```
 
 -   Updaten contract met id 42 dat behoort tot business-party met id 6532
-``` prettyprint
+``` http
 PUT https://api-gateway/digipolis/business-party/v1/business-parties/6532/contracts/42
 ```
 
@@ -108,7 +105,7 @@ POST https://api-gateway/digipolis/business-party/v1/business-parties
 ```
 
 -   Toevoegen van een nieuw contract aan business-party met id 6532
-``` prettyprint
+``` http
 POST https://api-gateway/digipolis/business-party/v1/business-parties/6532/contracts
 ```
 
@@ -117,7 +114,7 @@ POST https://api-gateway/digipolis/business-party/v1/business-parties/6532/contr
 Voor elk van onderstaande voorbeelden bevat de request body enkel die attributen die geupdate dienen te worden. Attributen die niet worden meegegeven blijven bijgevolg ook ongewijzigd. Het formaat waarin de te wijzigen attributen worden meegegeven zijn steeds conform de resource representatie.
 
 -   Updaten van attributen set van contract 42 voor business-party met id 6532
-``` prettyprint
+``` http
 PATCH https://api-gateway/digipolis/business-party/v1/business-parties/6532/contracts/42
 ```
 			   
@@ -141,7 +138,7 @@ Stel dat contract 42 van business party 6532 volgende resource representatie hee
 en je wil de prijs veranderen naar 950 Euro,<br/>
 dan kan je dit als volgt doen
 
-``` prettyprint
+``` http
 PATCH https://api-gateway/digipolis/business-party/v1/business-parties/6532/contracts/42
 ```
 met als request body
@@ -159,11 +156,11 @@ met als request body
 Voor elk van onderstaande voorbeelden is de request body steeds leeg
 
 -   Verwijderen van contract met id 42 voor business-party met id 6532
-``` prettyprint
+``` http
 DELETE https://api-gateway/digipolis/business-party/v1/business-parties/6532/contracts/42
 ```
 
 -   Verwijderen van business-party met id 6532
-``` prettyprint
+``` http
 DELETE https://api-gateway/digipolis/business-party/v1/business-parties/6532
 ```

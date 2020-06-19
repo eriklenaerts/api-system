@@ -1,11 +1,9 @@
 ## Paginatie
 ### Pagineren van collecties
-#### R-PC-001
-##### Gebruik altijd paginering bij het ophalen van collecties
+#### Gebruik altijd paginering bij het ophalen van collecties <span class="rule-ref">R-PC-001</span>
 Paginatie informatie wordt **steeds** terug gegeven bij het ophalen van collections. Dit zorgt er voor dat collections, die in eerste instantie een beperkt aantal entiteiten bevatten en op termijn groot kunnen worden, performant kunnen blijven.
 
-#### R-PC-002
-##### Gebruik altijd het vastgelegde pagineringsmodel bij het ophalen van collecties
+#### Gebruik altijd het vastgelegde pagineringsmodel bij het ophalen van collecties <span class="rule-ref">R-PC-002</span>
 Vanuit consumer standpunt is het noodzakelijk dat volgende informatie in de response wordt gegeven om voldoende informatie te bekomen rond de pagina's:
 
 | Info                         |                             | Verplicht                       |
@@ -29,15 +27,13 @@ Daarom kiezen we met onze API requirements voor een oplossing die 2 strategieën
 
 De client toepassing kiest welke strategie wordt toegepast dmv van een (optionele) query parameter : **`paging-strategy`** (zie verder).
 
-#### R-PC-003
-##### Ondersteun beide `paging-strategy` methodes
+#### Ondersteun beide `paging-strategy` methodes <span class="rule-ref">R-PC-003</span>
 Een API moet altijd beide `paging-strategy` methodes ondersteunen, zijnde `withCount`en `noCount` (zie verder).  
 
 ### Paginatie query parameters
-#### R-PQ-001
-##### Gebruik de vastgelegde query parameters `page`, `pagesize` en `paging-strategy` voor paginering
+#### Gebruik de vastgelegde query parameters `page`, `pagesize` en `paging-strategy` voor paginering <span class="rule-ref">R-PQ-001</span>
 Het ophalen van een bepaalde pagina zelf dient te gebeuren door middel van de **`page`** en **`pagesize`** query parameters (behalve voor de `last` link bij `paging-strategy=noCount`, zie verder).
-``` prettyprint
+``` http
 /partners?page=1&pagesize=10
 ```
 
@@ -50,12 +46,10 @@ De paginatie query parameters zijn **optioneel**. Dat maakt dat wanneer deze **n
 response message**, gebruik makend van de `withCount` paginatie strategie.    
 Het aantal elementen dat in zulk geval wordt teruggegeven (page size) is API specifiek en dient te worden bepaald tijdens de API design fase.
 
-#### R-PQ-002
-##### Paginering is `1` based
+#### Paginering is `1` based <span class="rule-ref">R-PQ-002</span>
 Paginatie queries starten steeds met *page=1*, niet 0. De keuze hiervoor is gemaakt op basis van gebruiksvriendelijkheid naar de API consumer en gebruiker toe.
 
-#### R-PQ-003
-##### Gebruik `withCount` of `noCount` waarden voor de paging strategie 
+#### Gebruik `withCount` of `noCount` waarden voor de paging strategie <span class="rule-ref">R-PQ-003</span> 
 Om de paging strategie mee te geven, gebruikt de consumer de optionele parameter **`paging-strategy`**. Deze heeft 2 mogelijke waardes : 
 - withCount (default als de query parameter niet wordt meegegeven)
 - noCount
@@ -94,8 +88,7 @@ Vervang daar waar nodig het deel achter de `#` in deze url.
 
 
 ### Paginatie response bericht
-#### R-PR-001
-##### Gebruik de HAL specificatie voor gepagineerde responses
+#### Gebruik de HAL specificatie voor gepagineerde responses <span class="rule-ref">R-PR-001</span>
 Om paginatie informatie naar de consumer terug te sturen baseren we ons op de HAL specificatie:
 
 <http://stateless.co/hal_specification.html>
@@ -237,8 +230,7 @@ Alle aspecten van paginatie samengevoegd geeft dit volgende response wrapper mes
 
 Zoals reeds vermeld vallen `totalElements` en `totalPages` weg bij `paging-strategy=noCount`.  
 
-#### R-PR-002
-##### Gebruik media type `application/hal+json` voor gepagineerde responses
+#### Gebruik media type `application/hal+json` voor gepagineerde responses <span class="rule-ref">R-PR-002</span>
 Het voorziene media type is steeds **`application/hal+json`**
 
 
@@ -246,7 +238,7 @@ Het voorziene media type is steeds **`application/hal+json`**
 
 Het ophalen van business parties (withCount)  
 
-``` prettyprint
+``` http
 https://api-gateway/digipolis/business-party/v1/business-parties?paging-strategy=withCount  
 ```
 
@@ -309,7 +301,7 @@ De swagger voor bovenstaand voorbeeld gebruik makende van de generieke definitie
 
 Het ophalen van business parties (noCount)  
 
-``` prettyprint
+``` http
 https://api-gateway/digipolis/business-party/v1/business-parties?paging-strategy=noCount  
 ```
 
