@@ -1,0 +1,58 @@
+section.cover .cover-main, section.cover .cover-main .anchor span, section.cover .cover-main small {
+    color: white
+}
+
+section.cover .cover-main blockquote {
+    border-left: none;
+}
+
+section.cover .cover-main>p:last-child a {
+    border-radius: 0rem;
+    border: 1px solid white;
+    box-sizing: border-box;
+    color: white;
+    display: inline-block;
+    font-size: 1.05rem;
+    letter-spacing: .1rem;
+    margin: .5rem 1rem;
+    padding: .75em 2rem;
+    text-decoration: none;
+    transition: all .15s ease;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: Titillium Web,Helvetica Neue,Helvetica,Arial,sans-serif;
+    line-height: 1.1;
+    margin: 0;
+}
+
+body, input {
+    font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+.sidebar, .sidebar-toggle {
+    background-color: rgb(243, 243, 243);
+}
+
+.search {
+    padding: 10px !important;
+    background-color: rgb(243, 243, 243);
+    border-bottom: none;
+    margin-top: 11px;
+}
+
+.search input {
+    font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,Arial,sans-serif;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.search input:focus { 
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.sidebar>h1 {
+    text-align: left;
+    margin-left: 15px;
+}
