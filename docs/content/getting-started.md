@@ -2,7 +2,6 @@
 
 Welkom op het API Develop & Design system van Digipolis. Hier vind je de API Requirements terug alsook de Design guide
 
-
 !> **Todo:** maak hier een intro met een opdeling voor eerder `designer` achtige profielen of eerder `developers`
 
 ## Contributing & Feedback
