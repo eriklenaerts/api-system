@@ -31,7 +31,16 @@
     * [OAS en YAML](/content/designers/oas-yaml.md)
     * [API design](/content/designers/design.md)
     * [Design principes](/content/designers/principles.md)
+    * [Patterns](/content/designers/patterns.md)
     * [Todo](/content/designers/todo.md)
+
+* Tools & Downloads
+
+    * [Validator](/content/tools/validate.md)
+    * [Starter OAS](/content/tools/starter.md)
+    * [Common OAS]()
+    * [Paging OAS]()
+    * [Problem OAS]()
 
 * Tips
 
