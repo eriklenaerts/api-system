@@ -19,11 +19,8 @@ Het ontwerp van een API ofwel het "design" ervan beschrijft een set van best pra
 
 De meeste ontwikkelaars zijn bezig met de interne kant van een API. We zien vaak dat van daaruit de swagger files worden gegenereerd. Dit resulteert in soms nogal cryptische API's zoals het voorbeeld hieronder. De `GET /basetext` is een niet voor de hand liggende naam.
 
-<a class="anchor" id="figuur-1"></a>
-<p align="center">
-  <img src="/content/images/cryptische-api.png">
-  <div align="center"><i>figuur 1 - cryptische api</i></div>
-</p>
+
+![](../images/cryptische-api.png)
 
 > #### Intuïtieve API's
 > *...leggen zichzelf uit door de eenvoud en elegantie van hun ontwerp. Deze API's zijn ontworpen met een outside-in-business perspectief waardoor ze bijdragen aan een fluent Developer eXperience (DX) voor haar afnemers.*

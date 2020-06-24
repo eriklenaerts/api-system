@@ -1,14 +1,14 @@
-## API ontwerp
+# API ontwerp
 
 In dit hoofdstuk gaan we het voorbeeld uit de [Analyse voorbereiding](/content/designers/analysis) stuk voor stuk omzetten in een API. We maken stapsgewijs het OAS document op in het [YAML formaat](/content/designers/oas-yaml).
 
-### Algemene API informatie
+## Algemene API informatie
 
 Dit is de header van je API waarin je een goede naam kiest. We gebruiken steeds zelfstandige naamwoorden en geen werkwoorden, bijvoorbeeld:
 
 ``` text
 - Sales Invoice
-- Users
+- Users 
 - Digital Asset Management
 ```
 
@@ -24,7 +24,7 @@ info:
   description: 'Create and manage Sales Invoices.....'
 ```
 
-### Data modellen
+## Data modellen
 De essentie van een API is dat het een stuk software is dat iets doet. Meestal is het beheren van specifieke data zoals het maken en opvragen van facturen of berekeningen allerlei maken.
 
 Als we data willen opvragen van een REST API, dan krijgen we meestal data in de vorm van JSON terug.
@@ -115,7 +115,7 @@ components:
           example: 30 EUR
 ```
 
-Zie je dat de InvoiceLine nu 2 properties heeft, één voor het aantal, en één voor het Product. Net zoals in het voorbeeld van onze analyse.
+Zie je dat de `InvoiceLine` nu 2 properties heeft, één voor het aantal, en één voor het Product. Net zoals in het voorbeeld van onze analyse.
 
 
 >[!NOTE|icon:fas fa-info-circle|label:Product Entiteit]
@@ -135,7 +135,7 @@ Zie je dat de InvoiceLine nu 2 properties heeft, één voor het aantal, en één
 
 De `product` property van de `InvoiceLine` schema verwijst naar het eerder gedefinieerd product in plaats van dat hier nog eens te herhalen door middel van de $ref notatie.
 
-Als laatste gaan we nog de Invoice entiteit zelf toevoegen aan de schema’s. Een factuur heeft één of meerdere factuurlijnen, deze verzameling wordt via een array opgezet in het OAS document:
+Als laatste gaan we nog de `Invoice` entiteit zelf toevoegen aan de schema’s. Een factuur heeft één of meerdere factuurlijnen, deze verzameling wordt via een array opgezet in het OAS document:
 
 ``` yaml
 components:
@@ -186,12 +186,12 @@ components:
           example: 30 EUR
 ```
 
-Merk op dat in het bovenstaande voorbeeld we ook een `klant` hebben toegevoegd aan de Invoice entiteit. Deze keer hebben we niet met een verwijzing gewerkt ($ref) maar met een klant object als onderdeel van het Invoice object. Dit is kan perfect, enigste probleem is dat we nu het schema van de klant niet kunnen hergebruiken.
+Merk op dat in het bovenstaande voorbeeld we ook een `klant` hebben toegevoegd aan de Invoice entiteit. Deze keer hebben we niet met een verwijzing gewerkt (`$ref`) maar met een klant object als onderdeel van het Invoice object. Dit is kan perfect, enigste probleem is dat we nu het schema van de klant niet kunnen hergebruiken.
 
 >[!TIP|label:Onthoud]
 > JSON is voor de data, YAML is voor het schema van deze data in het OAS document.
 
-### Invoice resources opvragen
+## Invoice resources opvragen
 
 Nu we onze data gedefinieerd hebben, komt de volgende vraag, hoe haal ik deze uit de API uit?
 
@@ -238,7 +238,7 @@ Hier zijn enkele spelregels om je resources in je path op te bouwen:
 - Resources worden allemaal met kleine letters geschreven
 - Gebruik een hyphen `-` om woorden te scheiden
 
-#### Haal één invoice resource op
+### Haal één invoice resource op
 
 Terug naar ons voorbeeld waar we een factuur resource willen ophalen. De volgende stap is het noteren van de HTTP method, in ons geval willen we data opvragen, dus dat wordt een GET method. Zoals je hieronder ziet, komt de GET onder het path terecht.
 
@@ -347,7 +347,7 @@ Valt er iets op? Inderdaad, we verwijzen hier naar het data model ‘Factuur’ 
 
 Als je gevolgd hebt in de editor van swagger krijg je visueel het volgende resultaat:
 
-#### Haal meerdere invoice resources op
+### Haal meerdere invoice resources op
 
 Stel dat we een lijst willen ophalen van factuur resources, dan komen er nog enkele concepten bij, waaronder:
 
@@ -356,7 +356,9 @@ Stel dat we een lijst willen ophalen van factuur resources, dan komen er nog enk
 
 Het eerste punt wordt gerealiseerd door een Paging concept. Hiermee halen we factuur resources op per bv 10 stuks. De afnemer gaat z’n vraag als volgt formuleren:
 
-`GET /invoices?page=1&pagesize=10`
+``` http
+GET /invoices?page=1&pagesize=10
+```
 
 In het vorige voorbeeld, waar we één factuur gingen ophalen, was er een `{id}` parameter dat onderdeel is van het path. Nu zien we een `page` en `pagesize` parameter die onderdeel zijn van de querystring, ofwel het deel van de url na het ?. Dit zijn de 2 mechanismen om parameters mee te geven. Binnen de API wereld is het een zekere afspraak dat de {id} in het path staat en de andere parameters in de querystring.
 
@@ -366,9 +368,11 @@ Bijkomend willen we factuur resources ophalen die aan een bepaald criteria voldo
 
 Dit realiseren we eveneens door een parameter mee te geven zoals:
 
-`GET /invoices?page=1&pagesize=10&customer-id=123`
+``` http
+GET /invoices?page=1&pagesize=10&customer-id=123
+```
 
-In tegenstelling tot page en pagesize is deze customer-id parameter wel specifiek voor deze API. De afspraak is dat we parameter name uit meerdere woorden schrijven met een ‘-’.
+In tegenstelling tot page en pagesize is deze `customer-id` parameter wel specifiek voor deze API. De afspraak is dat we parameternaam uit meerdere woorden schrijven met een ‘-’.
 
 Dit allemaal samen schrijven we in ons OAS document dan als volgt:
 
@@ -540,7 +544,7 @@ We hebben een opsplitsing gedaan tussen een factuur hoofding en een factuur dat 
 
 Met deze opsplitsing kunnen we nu enkel de factuur hoofdingen terugsturen wanneer we een lijst van facturen opvragen waardoor we de afnemer niet onnodig bestoken met teveel data. Meestal hangt data aan elkaar, zoals in ons voorbeeld. Een Factuur heeft een klant en factuurlijnen, een factuurlijn heeft een product, mogelijks zou een product in een magazijn staan, etc. Als we we de diepte van de data niet beperken in wat we teruggeven, dan zou je in één API request op de duur alle data van de gehele achterliggende databank ontvangen.
 
-#### Sub resources ophalen
+### Sub resources ophalen
 
 Stel dat ik nu enkel de factuurlijnen wil ophalen, moet ik dan eerst een invoice ophalen en daaruit de `InvoiceLines`? Wel, er is een manier om enkel sub resources op te halen, hiervoor moeten we mogelijks dieper in het pad afdalen.
 
@@ -609,7 +613,7 @@ Indien het een aggregatie is, wat het geval is voor producten, kan je beter opni
 
 `GET /products`
 
-### Invoice resources aanmaken
+## Invoice resources aanmaken
 
 We hebben tot hiertoe voornamelijk met de GET methode gewerkt om dingen op te vragen van onze API. Als we nieuwe facturen willen toevoegen of zeg maar, nieuwe factuur resources willen aanmaken, dan gebruiken we de POST methode.
 
@@ -676,7 +680,7 @@ De response van onze POST operatie is een HTTP 201 code. Additioneel komt er eve
                 example: '/invoices/INV10036'
 ```
 
-### Invoice resources aanpassen
+## Invoice resources aanpassen
 
 Er zijn 2 manieren om resources aan te passen:
 
@@ -784,7 +788,7 @@ De YAML ziet er als volgt uit:
 
 Het antwoord kan ofwel HTTP 204 zijn, de aanpassing is gelukt. Het kan ook een HTTP 201 zijn wat aangeeft dat de resource niet bestond en dat de update daarom veranderd is in een creatie.
 
-### Invoice resource verwijderen
+## Invoice resource verwijderen
 
 Een factuur verwijderen is misschien wel één van de eenvoudigste om te beschrijven in het OAS document. De afnemer gebruikt de DELETE methode in een request, en geeft het id mee van de te verwijderen resource:
 
@@ -812,7 +816,7 @@ Het schema wordt dan:
         - Invoicing
 ```
 
-### Eindresultaat
+## Eindresultaat
 
 In onderstaande figuur tonen we alles bij elkaar. De meeste van de operaties zijn specifiek aan één resource, enkel het ophalen van de lijst en de POST niet.
 
