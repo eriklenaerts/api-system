@@ -55,7 +55,26 @@
         style: 'text-align: right;',
         style: 'className',
       },
-      homepage: '/content/getting-started.md'
+      homepage: '/content/getting-started.md',
+      plugins: [
+        function (hook, vm) {
+          hook.ready(function () {
+            let urlQueryParam = new URL(
+              window.location.origin + location.pathname + window.location.search + location.hash.substring(1)
+            ).searchParams
+
+            if (urlQueryParam.has('id')) {
+              let urlId = urlQueryParam.get('id')
+              try {
+                document.querySelector('a[data-id*=\'' + urlId + '\']')
+                  .scrollIntoView()
+              } catch (e) {
+                console.warn('First load scroll failed', e)
+              }
+            }
+          });
+        }
+      ]
       // basePath: 'https://raw.githubusercontent.com/digipolisantwerpdocumentation/api-requirements/split-up/apireq-chapters/'
     }
   </script>
@@ -71,6 +90,7 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-yaml.min.js"></script>
   <script src="//unpkg.com/docsify-fontawesome/dist/docsify-fontawesome.min.js"></script>
   <script src="//unpkg.com/docsify-footer-enh/dist/docsify-footer-enh.min.js"></script>
-  
+
 </body>
+
 </html>
