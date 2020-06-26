@@ -1,4 +1,4 @@
-# Starter kit
+# Voorbeelden
 
 !> **Todo** Hier komt een voorbeeld/start swagger...
 

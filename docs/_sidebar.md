@@ -37,7 +37,8 @@
 * Tools & Downloads
 
     * [Validator](/content/tools/validate.md)
-    * [Starter OAS](/content/tools/starter.md)
+    * [Generators](/content/tools/generators.md)
+    * [Voorbeelden](/content/tools/examples.md)
     * [Common OAS]()
     * [Paging OAS]()
     * [Problem OAS]()
