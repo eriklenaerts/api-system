@@ -11,5 +11,5 @@ https://github.com/eriklenaerts/openapi-generator
 
 ## Generate Client SDK's
 
-https://openapi-generator.tech/
-https://editor.swagger.io/ (in het Generate Server menu)
+* https://openapi-generator.tech/
+* https://editor.swagger.io/ (in het Generate Server menu)

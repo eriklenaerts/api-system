@@ -1,9 +1,9 @@
 # Goede documentatie in Swagger files
 
-Als je API klaar is, heb je - als alles goed is - een Swagger file. Soms wordt deze gegenereerd, soms met de hand gemaakt. Belangrijk is dat deze Swagger file goed is gedocumenteerd. Een operatie `GET /assets` met als omschrijving *"Gets the assets"* is vrijwel nutteloos. We merken nochtans, dat veel gegenereerde Swagger files z'n resultaat opleveren. Vandaar, dat we je graag enkele tips geven hoe dit beter kan.  
+Als je API klaar is, heb je - als alles goed is - een Swagger file. Soms wordt deze gegenereerd, soms met de hand gemaakt. Belangrijk is dat deze Swagger file goed is gedocumenteerd. Een operatie `GET /assets` met als omschrijving *'Gets the assets'* is vrijwel nutteloos. We merken nochtans, dat veel gegenereerde Swagger files z'n resultaat opleveren. Vandaar, dat we je graag enkele tips geven hoe dit beter kan.  
 
 ## Tone of voice ##
-Vooraleer we in de specifieke details duiken, willen we het even hebben over jouw schrijfstijl, ofwel *"Tone of Voice"*. 
+Vooraleer we in de specifieke details duiken, willen we het even hebben over jouw schrijfstijl, ofwel *Tone of Voice*. 
 
 * benader de ontwikkelaars persoonlijk
 * beeld je in wat je tegen hen zou zeggen alsof ze naast je zouden zitten
@@ -15,8 +15,6 @@ Als de API wat abstracter is, leg je liefst enkele concepten op voorhand uit. De
 Merk op dat je Github Flavoured Markdown kan gebruiken in onder andere `description` velden, zo kan je linken naar bijkomende docs leggen.
 
 ## Swagger file ##
-Momenteel supporteren we [OpenAPI specification 2.0](http://swagger.io/)
-
 In de volgende hoofdstukken gaan we in op de verschillende delen van de Swagger file, meer bepaald:
 
 * [Het Info Object](#Info-object)

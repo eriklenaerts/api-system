@@ -6,7 +6,7 @@
 
 3. Je **afnemers van de API zijn developers**, leer hen kennen, net als klanten voor applicaties.
 
-4. Maak goed leesbare - niet gegenereerde - **documentatie** met voorbeelden, edge cases, mogelijke fouten en oplossingen. *(Hier alvast enkele [tips](https://github.com/digipolisantwerpdocumentation/api-requirements/blob/master/swagger-docs.md))*.
+4. Maak goed leesbare - niet gegenereerde - **documentatie** met voorbeelden, edge cases, mogelijke fouten en oplossingen. *(Hier alvast enkele [tips](/content/common/postman-tips))*.
 
 5. Hou het ontwerp **eenvoudig en intuïtief**, hoe minder externe documentatie er moet gelezen worden hoe beter het ontwerp.
 

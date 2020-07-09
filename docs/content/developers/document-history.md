@@ -24,3 +24,4 @@ Versie       | Auteur                 | Datum      | Opmerkingen
 6.0.3        | Peter Claes            | 28/10/2019 | Verduidelijking paginatie.
 6.0.4        | Erik Lenaerts          | 22/04/2020 | Herbruikbare definities toegevoegd.
 6.0.5        | Peter Claes            | 15/06/2020 | Document opgesplitst, enkele verduidelijkingen en Rule identificaties toegevoegd.
+7.0.0        | Peter C, Erik L.       | 01/08/2020 | Omvorming naar het Digipolis API System

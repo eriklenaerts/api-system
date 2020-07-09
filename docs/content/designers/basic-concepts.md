@@ -33,31 +33,36 @@ Content-Type: application/json
 }
 ```
 
-Vervolgens voegen we een factuurlijn toe; merk op dat we hier nergens het factuurnummer meegeven dat we terug gekregen hebben van de vorige request.
+Vervolgens voegen we een factuurlijn toe. 
 
-``` http
-POST /invoices/lines HTTP/1.1
-Content-Type: application/json
-{
-    "productKey": "1TER",
-    "quantity": 2
-    "..."
-}
-```
+> [!DANGER|icon:fas fa-code|label:Fout]
+> ``` http
+> POST /invoices/lines HTTP/1.1
+> Content-Type: application/json
+> {
+>     "productKey": "1TER",
+>     "quantity": 2
+>     "..."
+> }
+> ```
+> Dit gaat **niet** werken. 
+> 
+> We hebben namelijk nergens het factuurnummer meegeven dat we terug gekregen hebben van de vorige request. Stateless betekent dat de API niets gaat onthouden voor, er wordt geen context opgebouwd tussen requesten door. 
 
-Dit gaat dus __*NIET*__ werken.
+API zal niet onthouden welke factuur ik net heb gemaakt. Je moet expliciet alle data meegeven die nodig is om de volledige call af te handelen. In onderstaand voorbeeld geven we het factuurnummer mee in het path `POST /invoices/20037/lines`.
 
-De API zal niet onthouden welke factuur ik net heb gemaakt. Je moet expliciet alle data meegeven die nodig is om de volledige call af te handelen. In onderstaand voorbeeld geven we het factuurnummer mee in het path `POST /invoices/20037/lines`.
-
-``` http
-POST /invoices/20037/lines HTTP/1.1
-Content-Type: application/json
-{
-    "productKey": "1TER",
-    "quantity": 2
-    "..."
-}
-```
+> [!TIP|icon:fas fa-code|label:Goed]
+> Merk op dat er nu in de HTTP call een factuurnummer wordt meegegeven
+> 
+> ``` http
+> POST /invoices/20037/lines HTTP/1.1
+> Content-Type: application/json
+> {
+>     "productKey": "1TER",
+>     "quantity": 2
+>     "..."
+> }
+> ```
 
 ### Request Body, Path en methods
 

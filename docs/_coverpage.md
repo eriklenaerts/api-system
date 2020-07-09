@@ -2,7 +2,7 @@
 
 ![logo](/_media/acpaas-logo.png)
 
-# Digipolis API System <small>6.0.5</small>
+# Digipolis API System <small>7.0.0</small>
 
 > A guide to design & build developer friendly API's
 

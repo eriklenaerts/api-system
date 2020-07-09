@@ -6,10 +6,10 @@
 
 * API basics
     * [API](/content/common/api.md)
-    * [Design Style requirements](/content/common/design-style-reqs.md)
     * [REST introductie](/content/common/rest.md)
 
 * Voor Developers
+    * [Intro](/content/developers/intro.md)
     * [Resource representatie](/content/developers/resource-representation.md)
     * [Resources](/content/developers/resources.md)
     * [Requests](/content/developers/request.md)
@@ -39,9 +39,6 @@
     * [Validator](/content/tools/validate.md)
     * [Generators](/content/tools/generators.md)
     * [Voorbeelden](/content/tools/examples.md)
-    * [Common OAS]()
-    * [Paging OAS]()
-    * [Problem OAS]()
 
 * Tips
 

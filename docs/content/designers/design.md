@@ -219,6 +219,7 @@ paths:
 
 Het bovenstaand voorbeeld lees je als: Er is een `collectie` van invoice `resources` en hieruit gaan we er één opvragen met een gegeven id. Nog eens even de term Resources opfrissen.
 
+>[!TIP|icon:fas fa-quote-right|label:]
 > *The key abstraction of information in REST is a resource. Any information that can be named can be a resource: a document or image, a temporal service (e.g. “today’s weather in Los Angeles”), a collection of other resources, a non-virtual object (e.g., a person), and so on. In other words, any concept that might be the target of an author’s hypertext reference must fit within the definition of a resource. A resource is a conceptual mapping to a set of entities, not the entity that corresponds to the mapping at any particular point in time.*
 >
 > -- *Bron:* [Roy Fielding’s dissertation](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_1)
@@ -362,7 +363,7 @@ GET /invoices?page=1&pagesize=10
 
 In het vorige voorbeeld, waar we één factuur gingen ophalen, was er een `{id}` parameter dat onderdeel is van het path. Nu zien we een `page` en `pagesize` parameter die onderdeel zijn van de querystring, ofwel het deel van de url na het ?. Dit zijn de 2 mechanismen om parameters mee te geven. Binnen de API wereld is het een zekere afspraak dat de {id} in het path staat en de andere parameters in de querystring.
 
-Merk op dat deze parameter namen (page, pagesize) vast liggen, zo, kan iedere afnemer hier consistent mee werken over al onze API’s heen. Lees meer hierover in onze [API Requirements](/content/developers/paging).
+Merk op dat deze parameter namen (page, pagesize) vast liggen, zo, kan iedere afnemer hier consistent mee werken over al onze API’s heen. Lees meer hierover in de [API Requirements](/content/developers/paging).
 
 Bijkomend willen we factuur resources ophalen die aan een bepaald criteria voldoen, zoals alle facturen van klant met nummer 123.
 
@@ -401,15 +402,13 @@ Zoals je kan zien in bovenstaand voorbeeld beschrijven we de customer-id query p
 
 Visueel komt dit neer op:
 
-<a class="anchor" id="figuur-11"></a>
-<p align="center">
-  <img src="swagger-ui-2.png">
-  <div align="center"><i>figuur 11 - Swagger UI voorbeeld</i></div>
-</p>
+![Eindresultaat](../images/swagger-ui-2.png)
 
 Even terug naar de request van de afnemer:
 
-`GET /invoices?page=1&pagesize=10&customer-id=123`
+```http
+GET /invoices?page=1&pagesize=10&customer-id=123
+```
 
 Het antwoord op deze request is een lijst van Invoices. We passen onze GET operatie voor het ‘invoices’ path aan als volgt:
 
@@ -474,7 +473,7 @@ Nu hebben we Invoices nog wel niet gedefinieerd, daar komen we zo dadelijk op te
 }
 ```
 
-Dit is iets complexer dan het [opvragen van één factuur resource](#haal-één-factuur-resource-op), namelijk:
+Dit is iets complexer dan het [opvragen van één factuur resource](#haal-één-invoice-resource-op), namelijk:
 
 - Een `_links` gedeelte waarmee je linken krijgt naar andere pagina’s
 - Een `_embedded` gedeelte met de essentie, namelijk een lijst (dat herken je aan de vierkante haken na `“facturen”:`) van factuur resources. In het voorbeeld hierboven zie je alvast 2 factuur resources
@@ -550,7 +549,10 @@ Stel dat ik nu enkel de factuurlijnen wil ophalen, moet ik dan eerst een invoice
 
 Als afnemer, maak ik volgende request, wat zoveel wil zeggen als *“haal alle factuurlijnen op van factuur INV10034”*.
 
-`GET /invoices/INV10034/invoicelines``
+
+```http
+GET /invoices/INV10034/invoicelines
+```
 
 Om deze operatie toe te voegen bij de API vullen we het OAS document aan met:
 
@@ -602,16 +604,20 @@ Hiervoor moeten we natuurlijk ook een InvoiceLines data model beschrijven:
 
 De volgende vraag is natuurlijk, hoe ver en diep kan je gaan?  Kan je ook de producten van de factuurlijnen op deze manier opvragen?
 
-`GET /invoices/INV10034/invoicelines/1/products``
+```http
+GET /invoices/INV10034/invoicelines/1/products
+```
 
-Of is dit een brug te ver? Een hulpmiddel om deze beslissing te nemen is het verschil tussen een [aggregatie en compositie](#aggregatie-en-compositie). Bij deze laatste, is het een sub resource en daal je dieper in het pad af.
+Of is dit een brug te ver? Een hulpmiddel om deze beslissing te nemen is het verschil tussen een [aggregatie en compositie](/content/designers/analysis?id=aggregatie-en-compositie). Bij deze laatste, is het een sub resource en daal je dieper in het pad af.
 
 >[!TIP|label:Reminder]
 > Aggregaties zijn entiteiten die kunnen leven op zichzelf, composities zijn er die enkel een bestaansrecht hebben onder een ander.
 
 Indien het een aggregatie is, wat het geval is voor producten, kan je beter opnieuw starten als volgt
 
-`GET /products`
+```http
+GET /products
+```
 
 ## Invoice resources aanmaken
 
@@ -689,7 +695,9 @@ Er zijn 2 manieren om resources aan te passen:
 
 Laten we beginnen met een eenvoudige kleine aanpassing. Hiervoor gebruiken we de PATCH methode. We houden het eenvoudig en hanteren de [JSON Merge Patch](https://tools.ietf.org/html/rfc7386) stijl. Dit komt erop neer dat we een attribuut opgeven van de invoice resource met een nieuwe waarde. We geven dit mee met de PATCH request
 
-`PATCH /invoices/INV10036`
+```http
+PATCH /invoices/INV10036
+```
 
 met als body:
 
@@ -731,7 +739,9 @@ Als response komt er een HTTP 204 terug, wat wil zeggen dat de aanpassing gelukt
 
 We kunnen ook het volledige factuur aanpassen door gebruik te maken van de PUT methode. De YAML definitie in ons OAS document lijkt sterk op die van een POST, met dat verschil dat we in het path ook de id meegeven.
 
-`PUT /invoices/INV10036`
+```http
+PUT /invoices/INV10036
+```
 
 met als body:
 
@@ -792,7 +802,9 @@ Het antwoord kan ofwel HTTP 204 zijn, de aanpassing is gelukt. Het kan ook een H
 
 Een factuur verwijderen is misschien wel één van de eenvoudigste om te beschrijven in het OAS document. De afnemer gebruikt de DELETE methode in een request, en geeft het id mee van de te verwijderen resource:
 
-`DELETE /invoices/INV10036``
+```http
+DELETE /invoices/INV10036
+```
 
 Het schema wordt dan:
 
@@ -820,9 +832,4 @@ Het schema wordt dan:
 
 In onderstaande figuur tonen we alles bij elkaar. De meeste van de operaties zijn specifiek aan één resource, enkel het ophalen van de lijst en de POST niet.
 
-<a class="anchor" id="figuur-12"></a>
-<p align="center">
-  <img src="complete-api.png">
-  <div align="center"><i>figuur 12 - Eindresultaat</i></div>
-</p>
-
+![Eindresultaat](../images/complete-api.png)

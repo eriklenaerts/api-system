@@ -11,8 +11,8 @@ De analyse gaan we doen aan de hand van een voorbeeld. We maken hierbij gebruik 
 
 In veel analyse technieken zoals [Database Normalization](https://en.wikipedia.org/wiki/Database_normalization) of [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) begin je met het zoeken van `entiteiten` vanuit een functioneel domein.
 
-Stel, je krijgt als analyst de volgende vraag:
 
+>[!TIP|icon:fas fa-book-open|label:Je krijgt als analyst de volgende vraag]
 > *Ik wil een systeem om `verkoopfacturen` mee te kunnen maken. Een factuur bevat een logo, een uniek nummer, is steeds voor één specifieke `klant` op een gegeven factuurdatum en bevat één of meerdere `factuurlijnen`. Als ik 2 verschillende `producten` verkoop aan de klant, staan deze elk apart vermeld in 2 verschillende factuurlijnen. Elke factuurlijn toont de product code, een omschrijving, het aantal stuks dat er van verkocht is, de eenheidsprijs van het product en de totaalprijs (aantal x productprijs). Op het einde van de factuur staat het bedrag exclusief BTW, de BTW toelage en de totaalprijs inclusief BTW.*
 
 In bovenstaande tekst vinden we volgende entiteiten terug:
@@ -56,7 +56,8 @@ Wanneer we hierboven spreken over "nul", "één" of "meerdere" noemen we dat ook
 
 ### Aggregatie en compositie
 
-> ***Disclaimer:** We maken hier natuurlijk een aantal assumpties. In de praktijk zal je die uiteraard afstemmen met de personen voor wie je de toepassing creëert.*
+> [!WARNING]
+> We maken hier natuurlijk een aantal assumpties. In de praktijk zal je die uiteraard afstemmen met de personen voor wie je de toepassing creëert.
 
 
 Als we het voorgaande nog verder modelleren, kunnen we volgende stellen:

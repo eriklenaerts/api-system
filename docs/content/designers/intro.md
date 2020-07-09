@@ -13,7 +13,7 @@ Voor de eenvoud van het lezen van dit document hanteren we volgende afkortingen:
 
 ### Requirements vs Design
 
-Digipolis heeft op Github haar [API Requirements](https://github.com/digipolisantwerpdocumentation/api-requirements) gedocumenteerd. Dit zijn een set van regels die we volgen zodat we consistente API's bekomen. Het geeft bijvoorbeeld aan [welke parameters moeten gebruikt worden voor paging](https://github.com/digipolisantwerpdocumentation/api-requirements#paginatie-query-parameters) of  welke [HTTP verbs](https://github.com/digipolisantwerpdocumentation/api-requirements#http-verbs-1) we hanteren en hun doel. De API requirements is een document dat vooral is gericht naar ontwikkelaars.
+Digipolis heeft op Github haar [API Requirements](/content/developers/resource-representation.md) gedocumenteerd. Dit zijn een set van regels die we volgen zodat we consistente API's bekomen. Het geeft bijvoorbeeld aan [welke parameters moeten gebruikt worden voor paging](/content/developers/paging.md) of  welke [HTTP verbs](/content/developers/request?id=http-verbs) we hanteren en hun doel. De API requirements is een document dat vooral is gericht naar ontwikkelaars.
 
 Het ontwerp van een API ofwel het "design" ervan beschrijft een set van best practices hoe je een functioneel onderwerp omzet naar een API. Zo wordt er o.a. ingegaan hoe je routes best inricht.
 
@@ -22,20 +22,20 @@ De meeste ontwikkelaars zijn bezig met de interne kant van een API. We zien vaak
 
 ![](../images/cryptische-api.png)
 
-> #### Intuïtieve API's
+> [!TIP|label:Intuïtieve APIs]
 > *...leggen zichzelf uit door de eenvoud en elegantie van hun ontwerp. Deze API's zijn ontworpen met een outside-in-business perspectief waardoor ze bijdragen aan een fluent Developer eXperience (DX) voor haar afnemers.*
 
 ### Opbouw van dit document
 
-1. We starten met [enkele basisbegrippen](#2-enkele-basis-begrippen) en concepten die je moet kennen voor je een API kan ontwerpen
+1. We starten met [enkele basisbegrippen](/content/designers/basic-concepts.md) en concepten die je moet kennen voor je een API kan ontwerpen
 
-2. Als analist is het belangrijk dat je het functioneel domein in kaart brengt. In [hoofdstuk 3](#3-analyse-voorbereiding) werken we een voorbeeld uit in een UML class diagram.
+2. Als analist is het belangrijk dat je het functioneel domein in kaart brengt. In [dit hoodstuk](/content/designers/analysis.md) werken we een voorbeeld uit in een UML class diagram.
 
-3. We leren de taal waarin we een API kunnen beschrijven in [hoofdstuk 4](#4-ontwerpen-met-yaml-en-oas).
+3. We leren de [taal](/content/designers/oas-yaml.md) waarin we een API kunnen beschrijven in.
 
-4. In [hoofdstuk 5](#5-api-ontwerp) gaan we het voorbeeld uit hoofdstuk 3 omzetten in een API. 
+4. [Hier](/content/designers/design.md) gaan we het voorbeeld uit de analyse omzetten in een API. 
 
-5. Als laatste sommen we nog enkele [API ontwerp principes](#6-api-ontwerp-principes) op.
+5. Als laatste sommen we nog enkele [API ontwerp principes](/content/designers/principles.md) op.
 
 ---
 

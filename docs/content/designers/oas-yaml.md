@@ -28,7 +28,7 @@ Er zijn verschillende hulpmiddelen om een OAS document te maken, te valideren en
 
 ### Structuur van een OAS 3 document
 
-Zoals eerder vermeld, wordden API's uitgeschreven volgens de [Open API Specification v3.0.2](https://swagger.io/specification). Laat ons kort inzoomen op de onderdelen van z'n file:
+Zoals eerder vermeld, wordden API's uitgeschreven volgens de [Open API Specification v3.0.3](https://swagger.io/specification). Laat ons kort inzoomen op de onderdelen van z'n file:
 
 <a class="anchor" id="figuur-6"></a>
 <p align="center">
